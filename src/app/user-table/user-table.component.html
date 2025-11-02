@@ -1,136 +1,168 @@
-<div class="w-full space-y-4">
-  <div class="flex justify-between items-center mb-4">
+<div class="p-4 bg-white shadow-lg rounded-lg dark:bg-gray-800">
+  <div class="flex justify-between items-center mb-6">
     <input
       type="text"
       placeholder="Filter users..."
       [(ngModel)]="filterValue"
       (input)="onFilterChange($event)"
-      class="p-2 border rounded w-1/3"
+      class="flex-grow p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm dark:bg-gray-700 dark:text-white dark:border-gray-600"
     />
-    <app-add-user-sheet></app-add-user-sheet>
+    <app-add-user-sheet class="ml-4"></app-add-user-sheet>
   </div>
 
-  <div class="rounded-md border">
-    <table class="min-w-full divide-y divide-gray-200">
-      <thead class="bg-gray-50">
+  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+      <caption class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+        User Management Table
+        <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Manage your application users, including their details, language preferences, and biographical information.</p>
+      </caption>
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            <input type="checkbox" />
+          <th scope="col" class="px-6 py-3">
+            <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500" />
           </th>
           <th
-            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+            scope="col"
+            class="px-6 py-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600"
             (click)="onSort('name')"
           >
             Name
             <span *ngIf="sortColumn === 'name'">{{ sortDirection === 'asc' ? ' ▲' : ' ▼' }}</span>
           </th>
           <th
+            scope="col"
             *ngIf="!isMobile()"
-            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+            class="px-6 py-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600"
             (click)="onSort('language')"
           >
             Language
             <span *ngIf="sortColumn === 'language'">{{ sortDirection === 'asc' ? ' ▲' : ' ▼' }}</span>
           </th>
           <th
+            scope="col"
             *ngIf="!isMobile()"
-            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            class="px-6 py-3"
           >
             Bio
           </th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          <th scope="col" class="px-6 py-3">
             Actions
           </th>
         </tr>
       </thead>
-      <tbody class="bg-white divide-y divide-gray-200">
-<!--        <tr *ngIf="loading">-->
-<!--          <td colspan="5" class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">-->
-<!--            Loading users...-->
-<!--          </td>-->
-<!--        </tr>-->
+      <tbody>
         <tr *ngIf="!loading && paginatedUsers.length === 0">
-          <td colspan="5" class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">
+          <td colspan="5" class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-400">
             No results.
           </td>
         </tr>
-        <tr *ngFor="let user of paginatedUsers" class="hover:bg-gray-100 cursor-pointer">
+        <tr *ngFor="let user of paginatedUsers" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition duration-150 ease-in-out">
           <td class="px-6 py-4 whitespace-nowrap">
-            <input type="checkbox" />
+            <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 rounded dark:bg-gray-600 dark:border-gray-500" />
           </td>
-          <td class="px-6 py-4 whitespace-nowrap">
+          <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
             <input
               type="text"
               [value]="user.name"
               (blur)="onCellEdit(user, 'name', $event)"
               (keydown.enter)="$event.target.blur()"
-              class="w-full p-1 border rounded"
+              class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-400 dark:bg-gray-700 dark:text-white dark:border-gray-600"
             />
           </td>
-          <td *ngIf="!isMobile()" class="px-6 py-4 whitespace-nowrap">
+          <td *ngIf="!isMobile()" class="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-white">
             <input
               type="text"
               [value]="user.language"
               (blur)="onCellEdit(user, 'language', $event)"
               (keydown.enter)="$event.target.blur()"
-              class="w-full p-1 border rounded"
+              class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-400 dark:bg-gray-700 dark:text-white dark:border-gray-600"
             />
           </td>
-          <td *ngIf="!isMobile()" class="px-6 py-4 whitespace-nowrap truncate max-w-xs">
+          <td *ngIf="!isMobile()" class="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-white truncate max-w-xs">
             {{ user.bio }}
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-            <button (click)="onViewUser(user.id)" class="text-indigo-600 hover:text-indigo-900 mr-4">View</button>
-            <button (click)="onDeleteUser(user.id)" class="text-red-600 hover:text-red-900">Delete</button>
+            <button (click)="onViewUser(user.id)" class="text-blue-700 hover:text-blue-800 focus:ring-4 focus:ring-blue-300 dark:text-blue-500 dark:hover:text-blue-400 dark:focus:ring-blue-800 rounded-lg p-1 focus:outline-none" title="View User">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+              </svg>
+            </button>
+            <button (click)="onDeleteUser(user.id)" class="text-red-700 hover:text-red-800 focus:ring-4 focus:ring-red-300 dark:text-red-500 dark:hover:text-red-400 dark:focus:ring-red-800 rounded-lg p-1 focus:outline-none" title="Delete User">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+              </svg>
+            </button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-    <div class="text-sm text-gray-700">
-      <!-- Selected rows count will go here -->
+  <div class="flex flex-col md:flex-row items-center justify-between gap-4 mt-6">
+    <div class="text-sm text-gray-700 dark:text-gray-400">
+      Showing <span class="font-semibold text-gray-900 dark:text-white">{{ currentPage * pageSize + 1 }}</span> to <span class="font-semibold text-gray-900 dark:text-white">{{ Math.min((currentPage + 1) * pageSize, filteredAndSortedUsers.length) }}</span> of <span class="font-semibold text-gray-900 dark:text-white">{{ filteredAndSortedUsers.length }}</span> Entries
     </div>
     <div class="flex flex-col md:flex-row items-center gap-4 w-full justify-center md:justify-end">
       <div class="flex items-center space-x-2">
-        <label for="pageSize" class="text-sm font-medium">Rows per page</label>
-        <select id="pageSize" [ngModel]="pageSize" (change)="onPageSizeChange($event)" class="p-2 border rounded">
+        <label for="pageSize" class="text-sm font-medium text-gray-700 dark:text-gray-400">Rows per page</label>
+        <select id="pageSize" [ngModel]="pageSize" (change)="onPageSizeChange($event)" class="p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600">
           <option *ngFor="let size of pageSizes" [value]="size">{{ size }}</option>
         </select>
       </div>
 
-      <div class="flex items-center space-x-2">
-        <button
-          (click)="onPageChange(0)"
-          [disabled]="currentPage === 0"
-          class="p-2 border rounded"
-        >
-          &lt;&lt;
-        </button>
-        <button
-          (click)="onPageChange(currentPage - 1)"
-          [disabled]="currentPage === 0"
-          class="p-2 border rounded"
-        >
-          &lt;
-        </button>
-        <span class="text-sm font-medium">Page {{ currentPage + 1 }} of {{ totalPages }}</span>
-        <button
-          (click)="onPageChange(currentPage + 1)"
-          [disabled]="currentPage === totalPages - 1"
-          class="p-2 border rounded"
-        >
-          &gt;
-        </button>
-        <button
-          (click)="onPageChange(totalPages - 1)"
-          [disabled]="currentPage === totalPages - 1"
-          class="p-2 border rounded"
-        >
-          &gt;&gt;
-        </button>
-      </div>
+      <nav aria-label="Page navigation">
+        <ul class="inline-flex -space-x-px text-sm">
+          <li>
+            <button
+              (click)="onPageChange(0)"
+              [disabled]="currentPage === 0"
+              class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-white bg-gray-800 rounded-s hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              &lt;&lt;
+            </button>
+          </li>
+          <li>
+            <button
+              (click)="onPageChange(currentPage - 1)"
+              [disabled]="currentPage === 0"
+              class="flex items-center justify-center px-3 h-8 leading-tight text-white bg-gray-800 border-0 border-s border-gray-700 hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              &lt;
+            </button>
+          </li>
+          <li *ngFor="let page of pages">
+            <button
+              (click)="onPageChange(page)"
+              [ngClass]="{
+                'text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white': currentPage === page,
+                'flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white': currentPage !== page
+              }"
+              class="flex items-center justify-center px-3 h-8 leading-tight"
+            >
+              {{ page + 1 }}
+            </button>
+          </li>
+          <li>
+            <button
+              (click)="onPageChange(currentPage + 1)"
+              [disabled]="currentPage === totalPages - 1"
+              class="flex items-center justify-center px-3 h-8 leading-tight text-white bg-gray-800 border-0 border-s border-gray-700 hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              &gt;
+            </button>
+          </li>
+          <li>
+            <button
+              (click)="onPageChange(totalPages - 1)"
+              [disabled]="currentPage === totalPages - 1"
+              class="flex items-center justify-center px-3 h-8 leading-tight text-white bg-gray-800 border-0 border-s border-gray-700 rounded-e hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              &gt;&gt;
+            </button>
+          </li>
+        </ul>
+      </nav>
     </div>
   </div>
 </div>

@@ -12,7 +12,7 @@ import { map } from 'rxjs/operators';
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './user-list.component.html',
-  styleUrls: [] // Removed reference to user-list.component.css
+  styleUrls: []
 })
 export class UserListComponent implements OnInit {
   users$: Observable<User[]> | undefined;

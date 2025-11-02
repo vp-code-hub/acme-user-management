@@ -1,56 +1,60 @@
-<button (click)="openSheet()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+<button (click)="openSheet()" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
   Add User
 </button>
 
-<div *ngIf="isOpen" class="sheet-overlay" (click)="closeSheet()">
-  <div class="sheet-content" (click)="$event.stopPropagation()">
-    <h2 class="text-xl font-bold mb-4">Add New User</h2>
-    <form (ngSubmit)="onSubmit()">
-      <div class="mb-4">
-        <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name:</label>
+<div *ngIf="isOpen" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50 dark:bg-gray-900 dark:bg-opacity-80" (click)="closeSheet()">
+  <div class="bg-white rounded-lg shadow-xl p-6 w-11/12 md:w-1/2 lg:w-1/3 max-h-[90vh] overflow-y-auto transform transition-all duration-300 ease-out scale-100 opacity-100 dark:bg-gray-800">
+    <h2 class="text-2xl font-bold text-gray-800 mb-5 border-b pb-3 dark:text-white dark:border-gray-700">Add New User</h2>
+    <form (ngSubmit)="onSubmit()" class="space-y-4">
+      <div>
+        <label for="name" class="block text-gray-700 text-sm font-semibold mb-2 dark:text-gray-300">Name:</label>
         <input
           type="text"
           id="name"
           name="name"
           [(ngModel)]="newUser.name"
           required
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm dark:bg-gray-700 dark:text-white dark:border-gray-600"
+          placeholder="Enter user's name"
         />
       </div>
-      <div class="mb-4">
-        <label for="language" class="block text-gray-700 text-sm font-bold mb-2">Language:</label>
+      <div>
+        <label for="language" class="block text-gray-700 text-sm font-semibold mb-2 dark:text-gray-300">Language:</label>
         <input
           type="text"
           id="language"
           name="language"
           [(ngModel)]="newUser.language"
           required
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm dark:bg-gray-700 dark:text-white dark:border-gray-600"
+          placeholder="Enter user's language"
         />
       </div>
-      <div class="mb-4">
-        <label for="bio" class="block text-gray-700 text-sm font-bold mb-2">Bio:</label>
+      <div>
+        <label for="bio" class="block text-gray-700 text-sm font-semibold mb-2 dark:text-gray-300">Bio:</label>
         <textarea
           id="bio"
           name="bio"
           [(ngModel)]="newUser.bio"
           required
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          rows="4"
+          class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm resize-y dark:bg-gray-700 dark:text-white dark:border-gray-600"
+          placeholder="Enter user's bio"
         ></textarea>
       </div>
-      <div class="flex items-center justify-between">
-        <button
-          type="submit"
-          class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-        >
-          Add User
-        </button>
+      <div class="flex justify-end space-x-3 pt-4">
         <button
           type="button"
           (click)="closeSheet()"
-          class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          class="py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
         >
           Cancel
+        </button>
+        <button
+          type="submit"
+          class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+        >
+          Add User
         </button>
       </div>
     </form>
