@@ -44,11 +44,11 @@
         </tr>
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
-        <tr *ngIf="loading">
-          <td colspan="5" class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">
-            Loading users...
-          </td>
-        </tr>
+<!--        <tr *ngIf="loading">-->
+<!--          <td colspan="5" class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">-->
+<!--            Loading users...-->
+<!--          </td>-->
+<!--        </tr>-->
         <tr *ngIf="!loading && paginatedUsers.length === 0">
           <td colspan="5" class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">
             No results.

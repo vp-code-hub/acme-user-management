@@ -34,9 +34,11 @@ export class UserTableComponent implements OnInit, OnDestroy {
     this.userSubscription = this.userService.users$.subscribe((users) => {
       this.users = users;
       this.applyFiltersAndSort();
+      console.log('UserTableComponent: Users updated, count:', users.length);
     });
     this.loadingSubscription = this.userService.loading$.subscribe((loading) => {
       this.loading = loading;
+      console.log('UserTableComponent: Loading state updated to:', loading);
     });
   }
 
@@ -62,7 +64,7 @@ export class UserTableComponent implements OnInit, OnDestroy {
   }
 
   get filteredAndSortedUsers(): User[] {
-    let filtered = this.users.filter(user => 
+    let filtered = this.users.filter(user =>
       user.name.toLowerCase().includes(this.filterValue.toLowerCase()) ||
       user.language.toLowerCase().includes(this.filterValue.toLowerCase()) ||
       user.bio.toLowerCase().includes(this.filterValue.toLowerCase())

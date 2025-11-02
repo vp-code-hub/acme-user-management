@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { map, delay, switchMap, catchError } from 'rxjs/operators';
 import { User } from './models/user.model';
 import { ToastService } from './services/toast.service';
-import { UserStore } from './user.store'; // Import the new UserStore
+import { UserStore } from './user.store';
 
 @Injectable({
   providedIn: 'root',
@@ -16,12 +16,11 @@ export class UserService {
   constructor(
     private http: HttpClient,
     private toastService: ToastService,
-    private userStore: UserStore // Inject UserStore
+    private userStore: UserStore
   ) {
     this.loadUsers();
   }
 
-  // Expose store observables
   get users$(): Observable<User[]> {
     return this.userStore.users$;
   }
@@ -31,6 +30,7 @@ export class UserService {
   }
 
   private loadUsers() {
+    console.log('UserService: Setting loading to TRUE (start of loadUsers)');
     this.userStore.setLoading(true);
 
     this.http.get<any[]>(this.localDataUrl).pipe(
@@ -42,12 +42,12 @@ export class UserService {
         version: user.version ?? 1.0,
       }))),
       catchError(error => {
-        console.warn(`Could not load initial data from ${this.localDataUrl}. Starting with empty list.`, error);
+        console.warn(`UserService: Could not load initial data from ${this.localDataUrl}. Starting with empty list.`, error);
         return of([]);
       }),
       switchMap(initialUsers => {
         this.userStore.setUsers(initialUsers);
-        this.userStore.setLoading(false);
+        console.log('UserService: Local data loaded, users set. Still loading for remote data.');
 
         return of(initialUsers).pipe(
           delay(3000),
@@ -60,7 +60,7 @@ export class UserService {
               version: user.version ?? 1.0,
             }))),
             catchError(error => {
-              console.error(`Error loading remote data from ${this.remoteDataUrl}.`, error);
+              console.error(`UserService: Error loading remote data from ${this.remoteDataUrl}.`, error);
               return of([]);
             })
           ))
@@ -88,10 +88,12 @@ export class UserService {
             type: 'info'
           });
         }
+        console.log('UserService: Setting loading to FALSE (all data processed)');
         this.userStore.setLoading(false);
       },
       error: (err) => {
-        console.error('Error during user data synchronization:', err);
+        console.error('UserService: Error during user data synchronization:', err);
+        console.log('UserService: Setting loading to FALSE (on error)');
         this.userStore.setLoading(false);
       }
     });
